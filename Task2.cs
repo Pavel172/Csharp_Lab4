@@ -1,10 +1,11 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Task2 
 {
     public class Program
     {
-
         public class Car
         {
             public string Name { get; set; }
@@ -23,57 +24,32 @@ namespace Task2
 
         public class CarComparer : IComparer<Car>
         {
-            public static void Compare(List<Car> list, int x) 
+            public string sortby { get; set; }
+
+            public CarComparer(string sortby) 
             {
-                if(x == -1) 
+                this.sortby = sortby;
+            }
+            public int Compare(Car? x, Car? y)
+            {
+                if (sortby == "Name")
                 {
-                    for (int i = 0; i < list.Count; i++)
-                    {
-                        for (int j = 0; j < list.Count-1; j++)
-                        {
-                            if (list[j].Name.Length > list[j+1].Name.Length)
-                            {
-                                string temp = list[j].Name;
-                                list[j].Name = list[j + 1].Name;
-                                list[j + 1].Name = temp; 
-                            }
-                        }
-                    }
+                    return x.Name.Length - y.Name.Length;
                 }
-                if (x == 1)
+                if (sortby == "ProductionYear")
                 {
-                    for (int i = 0; i < list.Count; i++)
-                    {
-                        for (int j = 0; j < list.Count - 1; j++)
-                        {
-                            if (list[j].ProductionYear > list[j + 1].ProductionYear)
-                            {
-                                int temp = list[j].ProductionYear;
-                                list[j].ProductionYear = list[j + 1].ProductionYear;
-                                list[j + 1].ProductionYear = temp;
-                            }
-                        }
-                    }
+                    return x.ProductionYear-y.ProductionYear;
                 }
-                if (x == 0)
+                if (sortby == "MaxSpeed")
                 {
-                    for (int i = 0; i < list.Count; i++)
-                    {
-                        for (int j = 0; j < list.Count - 1; j++)
-                        {
-                            if (list[j].MaxSpeed > list[j + 1].MaxSpeed)
-                            {
-                                int temp = list[j].MaxSpeed;
-                                list[j].MaxSpeed = list[j + 1].MaxSpeed;
-                                list[j + 1].MaxSpeed = temp;
-                            }
-                        }
-                    }
+                    return x.MaxSpeed-y.MaxSpeed;
+                }
+                else
+                {
+                    throw new ArgumentException("Ошибка при сортировке");
                 }
             }
         }
-
-        public interface IComparer<Car> { }
 
         public static void Main() 
         {
@@ -81,43 +57,41 @@ namespace Task2
             Car car2 = new Car("BWM", 2009, 135);
             Car car3 = new Car("Renault", 2020, 150);
             Car car4 = new Car("Honda", 2004, 125);
-            List<Car> list1 = new List<Car>() {car1, car2, car3, car4};
+            Car[] car_array = {car1, car2, car3, car4};
             Console.WriteLine("Сортировка по названию: ");
-            for (int i = 0;i < list1.Count; i++) 
+            for (int i = 0;i < car_array.Length; i++) 
             {
-                Console.WriteLine(list1[i].Name);
+                Console.WriteLine(car_array[i].Name);
             }
-            CarComparer.Compare(list1, -1);
+            Array.Sort(car_array, new CarComparer("Name"));
             Console.WriteLine("--------------");
-            for (int i = 0; i < list1.Count; i++)
+            for (int i = 0; i < car_array.Length; i++)
             {
-                Console.WriteLine(list1[i].Name);
+                Console.WriteLine(car_array[i].Name);
             }
-            List<Car> list2 = new List<Car>() { car1, car2, car3, car4 };
             Console.WriteLine();
             Console.WriteLine("Сортировка по году выпуска: ");
-            for (int i = 0; i < list2.Count; i++)
+            for (int i = 0; i < car_array.Length; i++)
             {
-                Console.WriteLine(list2[i].ProductionYear);
+                Console.WriteLine(car_array[i].ProductionYear);
             }
-            CarComparer.Compare(list2, 1);
+            Array.Sort(car_array, new CarComparer("ProductionYear"));
             Console.WriteLine("--------------");
-            for (int i = 0; i < list2.Count; i++)
+            for (int i = 0; i < car_array.Length; i++)
             {
-                Console.WriteLine(list2[i].ProductionYear);
+                Console.WriteLine(car_array[i].ProductionYear);
             }
-            List<Car> list3 = new List<Car>() { car1, car2, car3, car4 };
             Console.WriteLine();
             Console.WriteLine("Сортировка по максимальной скорости: ");
-            for (int i = 0; i < list3.Count; i++)
+            for (int i = 0; i < car_array.Length; i++)
             {
-                Console.WriteLine(list3[i].MaxSpeed);
+                Console.WriteLine(car_array[i].MaxSpeed);
             }
-            CarComparer.Compare(list3, 0);
+            Array.Sort(car_array, new CarComparer("MaxSpeed"));
             Console.WriteLine("--------------");
-            for (int i = 0; i < list3.Count; i++)
+            for (int i = 0; i < car_array.Length; i++)
             {
-                Console.WriteLine(list3[i].MaxSpeed);
+                Console.WriteLine(car_array[i].MaxSpeed);
             }
         }
     }
